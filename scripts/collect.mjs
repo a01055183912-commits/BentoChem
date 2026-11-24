@@ -87,6 +87,33 @@ const SOURCES = [
       }));
     },
   },
+  {
+    id: 'dcb', org: '부산디자인진흥원',
+    async fetch() {
+      // 고시/공고 게시판. 접수 마감일이 따로 없어, 구분이 '공고'이고 상태가 '진행'이며
+      // 최근 120일 안에 올라온 모집·공모·지원 공고만 가져옵니다 (입찰·채용·결과 발표는 제외).
+      const base = 'https://dcb.or.kr/01_news/';
+      const cutoff = new Date(Date.now() - 120 * 864e5).toISOString().slice(0, 10);
+      const out = [];
+      for (let page = 1; page <= 2; page++) {
+        if (page > 1) await sleep(800);
+        const html = await getText(`${base}?mcode=0401010000&page=${page}`);
+        const rows = html.split('<tr').filter((x) => x.includes('class="case"'));
+        if (page === 1 && !rows.length) throw new Error('게시판 구조를 찾지 못했습니다 (사이트 개편 가능성)');
+        for (const row of rows) {
+          const kind = clean((row.match(/class="case">([^<]*)</) || [])[1]);
+          const m = row.match(/no=(\d+)&page=\d+">([^<]*)<\/a>/);
+          const st = (row.match(/class="\s*st_(\w+)/) || [])[1];
+          const date = (row.match(/(\d{4}-\d{2}-\d{2})/) || [])[1] || '';
+          if (!m || kind !== '공고' || st !== 'ing' || date < cutoff) continue;
+          const title = clean(m[2]);
+          if (!/모집|공모|지원|신청|참가/.test(title) || /결과|선정|발표/.test(title)) continue;
+          out.push({ id: m[1], title, status: '진행', start: date, end: '', url: `${base}?mcode=0401010000&mode=2&no=${m[1]}&page=1`, summary: '' });
+        }
+      }
+      return out;
+    },
+  },
 ];
 
 const items = [], errors = {};
