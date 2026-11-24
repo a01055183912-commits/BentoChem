@@ -73,6 +73,20 @@ const SOURCES = [
       return out;
     },
   },
+  {
+    id: 'bsia', org: '부산기술창업투자원',
+    async fetch() {
+      // state=ipg: 사이트가 "진행 중인 사업"으로 분류한 공고만 요청합니다 (접수기간이 비어 있으면 상시·미정).
+      const j = JSON.parse(await getText('https://www.bsia.or.kr/api/announcements?pno=1&use_yn=Y&mcode=an011&userYn=Y&state=ipg&order=indt'));
+      if (j.resultCode !== 200 || !Array.isArray(j.list)) throw new Error(`API 응답 이상 (resultCode ${j.resultCode})`);
+      return j.list.map((x) => ({
+        id: String(x.bsa_seq), title: clean(x.bsa_title), status: '진행중',
+        start: day(x.bsa_apl_sdt), end: day(x.bsa_apl_edt),
+        url: `https://www.bsia.or.kr/announcements/${x.bsa_seq}?mcode=an011`,
+        summary: clean([x.bs_type_str, x.bs_title].filter(Boolean).join(' · ')),
+      }));
+    },
+  },
 ];
 
 const items = [], errors = {};
@@ -80,7 +94,7 @@ for (const s of SOURCES) {
   try {
     const got = await s.fetch();
     // 마감이 지난 공고는 제외 (마감일 미정이면 접수중/예정만 유지)
-    const keep = got.filter((n) => (n.end ? n.end >= today : /접수|예정/.test(n.status)));
+    const keep = got.filter((n) => (n.end ? n.end >= today : /접수|예정|진행/.test(n.status)));
     keep.forEach((n) => items.push({ src: s.id, org: s.org, ...n }));
     console.log(`${s.org}: ${got.length}건 중 유효 ${keep.length}건`);
   } catch (e) { errors[s.id] = String(e.message || e); console.error(`${s.org} 실패: ${errors[s.id]}`); }
