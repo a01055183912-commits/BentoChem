@@ -240,6 +240,19 @@ nav a{display:inline-flex;align-items:center;gap:7px}
 .tl dd b{color:var(--fg)}
 .tl dd:last-of-type{border-bottom:0}
 @media (min-width:640px){.slide .say{grid-template-columns:1fr auto;align-items:end;justify-items:stretch}.slide .say img{margin:0;width:170px}.slide .bub::after{right:-12px;bottom:30px;transform:rotate(-45deg)}}
+
+.voice{display:grid;gap:10px;padding:14px;margin-bottom:14px;border-radius:14px;background:var(--accent-soft);border:2px solid var(--line)}
+.voice .row{flex-wrap:nowrap;align-items:center}
+.voice input{flex:1 1 0;width:0;min-width:0}.voice .btn{flex:none}
+.vbtn{min-height:50px;font-size:17px;font-weight:700;display:inline-flex;align-items:center;gap:8px;flex:none}
+.vbtn .ic{width:22px;height:22px}
+.voice .row:first-child{flex-wrap:wrap}
+.vinfo{border-radius:12px;padding:12px 14px;background:var(--surface);border-left:6px solid var(--cyan);font-size:15.5px;display:grid;gap:6px}
+.vinfo.bad{border-left-color:var(--red)}
+.vinfo b{font-weight:900}
+.vinfo .say{color:var(--muted)}
+.vgrid{display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+.vgrid span{color:var(--muted)}
 </style>
 
 <style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
@@ -422,18 +435,20 @@ function aggCsv(){ const {m,sr,dimNames}=window._agg||{}; if(!m) return ''; cons
 /* ---------- 화면: 지표 입력 ---------- */
 function vEntry(){ const m=MET[UI.entryMetric]&&MET[UI.entryMetric].agg!=='calc'?MET[UI.entryMetric]:MET.revenue;
   const list=ENTRIES.filter(e=>!UI.filter||e.metric===UI.filter).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.at||0)-(a.at||0)).slice(0,300);
-  const dimInput=!m.dims?'':Array.isArray(m.dims)?`<label class="full" for="e-dim">구분<select id="e-dim" name="dim">${m.dims.map(x=>`<option>${esc(x)}</option>`).join('')}</select></label>`:`<label class="full" for="e-dim">구분<input id="e-dim" name="dim" placeholder="${esc(m.dimHint||'')}" autocomplete="off"></label>`;
+  const F=UI.fill||{};
+  const dimInput=!m.dims?'':Array.isArray(m.dims)?`<label class="full" for="e-dim">구분<select id="e-dim" name="dim">${m.dims.map(x=>`<option ${x===F.dim?'selected':''}>${esc(x)}</option>`).join('')}</select></label>`:`<label class="full" for="e-dim">구분<input id="e-dim" name="dim" value="${esc(F.dim||'')}" placeholder="${esc(m.dimHint||'')}" autocomplete="off"></label>`;
   const how=m.agg==='sum'?'발생한 날짜에 금액·수량을 입력합니다. 같은 기간 값은 자동으로 더해집니다.':m.agg==='last'?'측정 시점의 현재값을 입력합니다 (예: 월말 기준 인원, 결산일 기준 자산).':'측정할 때마다 값을 입력합니다. 기간 평균으로 집계됩니다.';
   return `<div><h1>지표 입력</h1><p class="lead">날짜 단위로 자유롭게 입력하면 집계 분석에서 지표별 기준에 맞게 합산됩니다. 비율 지표는 입력하지 않아도 자동 계산됩니다.</p></div>
   ${sampleBanner()}
   <div class="g2">
    <div class="card"><h2>한 건 입력 <span class="tag">${m.code}</span> ${badge(m.agg)}</h2><p class="why">${esc(how)}${m.spec?` 품질기준: <b>${esc(m.specText)}</b>`:''}</p>
+    ${voiceCard()}
     <form id="f-entry" class="form">
      <label class="full" for="e-metric">지표<select id="e-metric" name="metric">${metricOptions(m.id,x=>x.agg!=='calc')}</select></label>
-     <label for="e-date">날짜<input id="e-date" name="date" type="date" value="${today()}" required></label>
-     <label for="e-value">값 (${esc(m.unit)})<input id="e-value" name="value" type="number" step="any" inputmode="decimal" required placeholder="0"></label>
+     <label for="e-date">날짜<input id="e-date" name="date" type="date" value="${esc(F.date||today())}" required></label>
+     <label for="e-value">값 (${esc(m.unit)})<input id="e-value" name="value" type="number" step="any" inputmode="decimal" required placeholder="0" value="${F.value!=null?esc(F.value):''}"></label>
      ${dimInput}
-     <label class="full" for="e-memo">메모<input id="e-memo" name="memo" placeholder="출처나 근거 (선택)" autocomplete="off"></label>
+     <label class="full" for="e-memo">메모<input id="e-memo" name="memo" value="${esc(F.memo||'')}" placeholder="출처나 근거 (선택)" autocomplete="off"></label>
      <div class="full row"><button class="btn pri" type="submit" ${canWrite?'':'disabled'}>저장</button>${canWrite?'':'<span class="note">보기 권한만 있어 저장할 수 없습니다.</span>'}</div>
     </form></div>
    <div class="card"><div class="row" style="margin-bottom:10px"><h2 style="margin:0">입력 내역</h2><span class="note">${list.length}건</span><span class="sp"></span>
@@ -714,7 +729,7 @@ document.addEventListener('change',e=>{ const t=e.target;
   if(t.id==='f-metric'){UI.metric=t.value;saveUI();render(true);}
   else if(t.id==='f-from'){UI.from=t.value;render(true);}
   else if(t.id==='f-to'){UI.to=t.value;render(true);}
-  else if(t.id==='e-metric'){UI.entryMetric=t.value;saveUI();render(true);}
+  else if(t.id==='e-metric'){UI.entryMetric=t.value;UI.fill=null;UI.vinfo=null;saveUI();render(true);}
   else if(t.id==='f-filter'){UI.filter=t.value;render(true);}
   else if(t.id==='f-year'){UI.year=t.value;render(true);} });
 document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.copy&&e.target.tagName==='CODE'){ e.preventDefault(); copyText(e.target.dataset.copy); } });
@@ -746,7 +761,7 @@ document.addEventListener('submit',async e=>{ const f=e.target; e.preventDefault
   if(f.id==='f-entry'){
     const v=parseFloat(fd.get('value')); if(!isFinite(v)){toast('값에 숫자를 입력하세요.');return;}
     const rec={metric:fd.get('metric'),date:fd.get('date'),value:v,dim:(fd.get('dim')||'').toString().trim().slice(0,60),memo:(fd.get('memo')||'').toString().trim().slice(0,200),at:Date.now()};
-    const ok=await addEntry(rec); if(ok){ const m=MET[rec.metric]; toast(`${m.label} ${fmt(v,2)}${m.unit} 저장됨${m.spec?(isOk(m,v)?' · 적합':' · 부적합'):''}`); const x=$('#e-value'); if(x){x.value='';x.focus();} const mm=$('#e-memo'); if(mm) mm.value=''; }
+    const keepF=UI.fill, keepV=UI.vinfo; UI.fill=null; UI.vinfo=null; const ok=await addEntry(rec); if(!ok){ UI.fill=keepF; UI.vinfo=keepV; } if(ok){ const m=MET[rec.metric]; toast(`${m.label} ${fmt(v,2)}${m.unit} 저장됨${m.spec?(isOk(m,v)?' · 적합':' · 부적합'):''}`); const x=$('#e-value'); if(x){x.value='';x.focus();} const mm=$('#e-memo'); if(mm) mm.value=''; }
   } else if(f.dataset.form==='master'){
     const sec=INFO_BY[f.dataset.sec]; const data={}; sec.fields.forEach(fl=>data[fl.k]=(fd.get(fl.k)||'').toString().slice(0,4000)); data._at=Date.now();
     if(await saveMaster(sec.id,data)){ toast(`${sec.name}을 저장했습니다`); document.activeElement&&document.activeElement.blur(); render(true); }
@@ -809,7 +824,8 @@ const ICONS={
  paper:'<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
  cal:'<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
- star:'<path d="M12 3.5l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8l6-.8z"/>'
+ star:'<path d="M12 3.5l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8l6-.8z"/>',
+ mic:'<rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6"/>'
 };
 const ico=(k,cls)=>`<svg class="ic ${cls||''}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]||''}</svg>`;
 const ARROW='<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
@@ -912,6 +928,102 @@ const TERMS=[
 function vTerms(){ return `<div><h1>용어 사전</h1><p class="lead">앱에 나오는 말을 쉽게 풀어 두었어요. 기준 수치는 앱에 설정된 값이에요.</p></div>
   <div class="hello"><img src="assets/mascot.webp" alt="벤토켐이"><div><b>모르는 말은 여기서 찾아요!</b><span>궁금한 말은 소개에서 다시 볼 수도 있어요.</span></div></div>
   ${TERMS.map(t=>`<div class="card"><div class="tgrp">${esc(t.g)}</div><dl class="tl">${t.items.map(([w,en,d])=>`<dt>${esc(w)}${en?`<small>${esc(en)}</small>`:''}</dt><dd>${d}</dd>`).join('')}</dl></div>`).join('')}`; }
+
+
+/* ---------- 음성(또는 글)으로 지표 입력 ---------- */
+const VOICE_METRICS=[
+ ['ucs_28d',/(28|이십팔)\s*일\s*(압축\s*)?강도|28\s*일|이십팔\s*일/],
+ ['ucs_1h',/(1|일|한)\s*시간\s*(압축\s*)?강도|(1|한)\s*시간/],
+ ['ucs_28d',/압축\s*강도|일축/],
+ ['bleeding',/블리딩|재료\s*분리/],
+ ['viscosity',/점도/],
+ ['geltime',/[겔젤]\s*타임/],
+ ['plastic_time',/가소\s*상?\s*(유지)?\s*(시간)?/],
+ ['qc_fails',/부적합/],
+ ['qc_tests',/시험\s*건수|품질\s*시험/],
+ ['cur_assets',/유동\s*자산/],['cur_liab',/유동\s*부채/],
+ ['assets',/자산\s*(총계)?/],['liabilities',/부채\s*(총계)?/],['equity',/자본\s*(총계)?/],
+ ['rnd_cost',/R\s*&?\s*D|연구\s*개발|알앤디/i],
+ ['headcount',/상시\s*근로자|근로자|직원|인원/],
+ ['op_profit',/영업\s*이익/],
+ ['orders',/수주/],
+ ['ore_in',/원광|입고/],
+ ['shipment',/출하/],
+ ['production',/생산/],
+ ['stock',/재고/],
+ ['utilization',/(설비\s*)?가동\s*[률율]/],
+ ['revenue',/매출/]
+];
+const KD={영:0,공:0,일:1,이:2,삼:3,사:4,오:5,육:6,칠:7,팔:8,구:9}, KS={십:10,백:100,천:1000}, KB={만:1e4,억:1e8,조:1e12};
+const NUMCH=/[0-9.,영공일이삼사오육칠팔구십백천만억조점]/;
+function parseKoNum(str){ const s=String(str).replace(/[,\s]/g,''); let total=0,sec=0,cur=null,dec=false,frac='',seen=false;
+  for(const ch of s){
+    if(dec){ if(/[0-9]/.test(ch)) frac+=ch; else if(KD[ch]!==undefined) frac+=KD[ch]; else break; continue; }
+    if(/[0-9]/.test(ch)){ cur=(cur==null?0:cur)*10+ +ch; seen=true; }
+    else if(ch==='.'||ch==='점'){ dec=true; seen=true; }
+    else if(KS[ch]){ sec+=(cur==null?1:cur)*KS[ch]; cur=null; seen=true; }
+    else if(KB[ch]){ sec+=(cur==null?0:cur); total+=(sec===0?1:sec)*KB[ch]; sec=0; cur=null; seen=true; }
+    else if(KD[ch]!==undefined){ cur=KD[ch]; seen=true; }
+    else break;
+  }
+  if(!seen) return null; const v=total+sec+(cur==null?0:cur)+(frac?parseFloat('0.'+frac):0); return isFinite(v)?v:null; }
+function findNumberRun(t){ const runs=[]; let i=0;
+  while(i<t.length){ if(NUMCH.test(t[i])){ let j=i; while(j<t.length&&(NUMCH.test(t[j])||(t[j]===' '&&j+1<t.length&&NUMCH.test(t[j+1])&&j>i&&NUMCH.test(t[j-1])))) j++; runs.push([i,j,t.slice(i,j)]); i=j; } else i++; }
+  const good=runs.filter(r=>/[0-9]/.test(r[2])); const pool=good.length?good:runs.filter(r=>parseKoNum(r[2])!=null&&r[2].replace(/[.,\s]/g,'').length>0);
+  if(!pool.length) return null; pool.sort((a,b)=>b[2].length-a[2].length); return pool[0]; }
+function parseVoice(raw){ const text=String(raw||'').trim(); let t=text; const notes=[];
+  if(!text) return {ok:false,text,msg:'말한 내용이 비어 있어요.'};
+  let mid=null; for(const [id,re] of VOICE_METRICS){ const m=t.match(re); if(m){ mid=id; t=t.replace(m[0],' '); break; } }
+  if(!mid) return {ok:false,text,msg:'어떤 지표인지 못 알아들었어요. 예: "매출 오백만원 특수벤토 오늘"'};
+  const met=MET[mid];
+  // 날짜
+  let date=today(); const td=new Date(today()+'T00:00:00Z');
+  const md=t.match(/([0-9영공일이삼사오육칠팔구십]+)\s*월\s*([0-9영공일이삼사오육칠팔구십]+)\s*일/);
+  if(md){ const mo=parseKoNum(md[1]), da=parseKoNum(md[2]); if(mo>=1&&mo<=12&&da>=1&&da<=31){ let y=td.getUTCFullYear(); let d=new Date(Date.UTC(y,mo-1,da)); if(d>td) d=new Date(Date.UTC(y-1,mo-1,da)); date=DS(d); } t=t.replace(md[0],' '); }
+  else if(/그저께|그제/.test(t)){ const d=new Date(td); d.setUTCDate(d.getUTCDate()-2); date=DS(d); t=t.replace(/그저께|그제/,' '); }
+  else if(/어제/.test(t)){ const d=new Date(td); d.setUTCDate(d.getUTCDate()-1); date=DS(d); t=t.replace('어제',' '); }
+  else if(/오늘/.test(t)){ t=t.replace('오늘',' '); }
+  // 구분(고정 목록)
+  let dim='';
+  if(Array.isArray(met.dims)){ const sq=t.replace(/\s/g,''); for(const o of met.dims){ const keys=o.split('·'); const hit=keys.find(k=>sq.includes(k)||(k==='특수벤토'&&sq.includes('벤토'))); if(hit){ dim=o; t=t.replace(new RegExp(hit.split('').join('\\s*')),' '); break; } } }
+  // 숫자
+  const run=findNumberRun(t); let value=null,raw0=null;
+  if(run){ value=parseKoNum(run[2]); raw0=run[2].trim(); t=t.slice(0,run[0])+' '+t.slice(run[1]); }
+  if(value==null) return {ok:false,text,msg:'숫자를 못 알아들었어요. 값을 숫자로 다시 말해 주세요.'};
+  // 단위 변환
+  const unitWords=/킬로그램|킬로|그램|kg|퍼센트|프로|%|메가파스칼|엠피에이|mpa|원|톤|초|분|건|명/gi;
+  const tail=text;
+  if(met.unit==='백만원'){ if(/[원만억천]/.test(raw0)||/원/.test(tail)){ const before=value; value=value/1e6; notes.push(`${fmt(before,0)}원 → ${fmt(value,4)}백만원`); } }
+  else if(met.unit==='톤'&&/킬로|kg/i.test(tail)){ const before=value; value=value/1000; notes.push(`${fmt(before,0)}kg → ${fmt(value,3)}톤`); }
+  value=Math.round(value*1e4)/1e4;
+  // 남은 말 → 구분(자유 입력) 또는 메모
+  t=t.replace(unitWords,' ').replace(/(입력|해\s*줘|해줘|저장|입니다|이에요|예요|이야|으로|에서|에는|에|은|는|이|가|을|를|의|로|및|하고|그리고)(?=\s|$)/g,' ').replace(/\s+/g,' ').trim();
+  let memo='';
+  if(met.dims==='free'){ dim=t.slice(0,60); } else if(t.length>=2){ memo=t.slice(0,200); }
+  return {ok:true,text,id:mid,value,dim,memo,date,notes}; }
+function applyVoice(text){ const r=parseVoice(text); UI.vinfo=r;
+  if(r.ok){ UI.entryMetric=r.id; UI.fill={date:r.date,value:r.value,dim:r.dim,memo:r.memo}; saveUI(); }
+  render(true); if(r.ok) toast('입력칸에 채웠어요. 맞는지 확인하고 저장하세요'); }
+function voiceInfoHtml(){ const r=UI.vinfo; if(!r) return '';
+  if(!r.ok) return `<div class="vinfo bad"><b>다시 말해 주세요</b><div>“${esc(r.text)}”</div><div>${esc(r.msg)}</div></div>`;
+  const m=MET[r.id];
+  return `<div class="vinfo ok"><b>이렇게 알아들었어요</b><div class="say">“${esc(r.text)}”</div>
+   <div class="vgrid"><span>지표</span><b>${esc(m.code)} ${esc(m.label)}</b><span>값</span><b>${esc(fmt(r.value,4))} ${esc(m.unit)}</b><span>구분</span><b>${esc(r.dim||'없음')}</b><span>날짜</span><b>${esc(r.date)}</b></div>
+   ${r.notes.length?`<div class="note">단위 변환: ${esc(r.notes.join(', '))}</div>`:''}<div class="note">맞으면 아래 「저장」을 누르고, 다르면 칸을 고치세요.</div></div>`; }
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition; let recog=null;
+function voiceCard(){ return `<div class="voice"><div class="row"><button class="btn pri vbtn" id="v-btn" type="button" ${canWrite?'':'disabled'}>${ico('mic')}<span id="v-label">말로 입력</span></button><span class="note" id="v-live">${SR?'누르고 말한 뒤 잠시 기다리세요. 예: “매출 오백만원 특수벤토 오늘”':'이 브라우저는 음성 인식을 지원하지 않아요. 아래에 글로 쓰거나 키보드의 마이크 버튼을 쓰세요.'}</span></div>
+   <div class="row"><input id="v-text" placeholder="글로 써도 돼요 (예: 생산량 25톤 안정제 어제)" autocomplete="off" aria-label="말한 내용을 글로 입력"><button class="btn" id="v-parse" type="button">해석</button></div>${voiceInfoHtml()}</div>`; }
+function setVoiceUi(on,live){ const b=document.getElementById('v-label'); if(b) b.textContent=on?'듣는 중… (다시 누르면 멈춤)':'말로 입력'; const l=document.getElementById('v-live'); if(l&&live!=null) l.textContent=live; }
+function startVoice(){ if(recog){ try{recog.stop();}catch(e){} return; }
+  if(!SR){ toast('이 브라우저는 음성 인식을 지원하지 않아요'); return; }
+  const rec=new SR(); rec.lang='ko-KR'; rec.interimResults=true; rec.continuous=false; rec.maxAlternatives=1; recog=rec; let finalText='', got=false;
+  rec.onstart=()=>setVoiceUi(true,'듣고 있어요…');
+  rec.onresult=e=>{ let t=''; for(const r of e.results){ t+=r[0].transcript; if(r.isFinal) got=true; } finalText=t; setVoiceUi(true,'“'+t+'”'); };
+  rec.onerror=e=>{ const m={'not-allowed':'마이크 사용을 허용해 주세요.','service-not-allowed':'이 브라우저에서는 음성 인식을 쓸 수 없어요.','no-speech':'말소리가 들리지 않았어요.','audio-capture':'마이크를 찾지 못했어요.','network':'인터넷 연결을 확인해 주세요.'}[e.error]||'음성 인식에 문제가 있었어요.'; setVoiceUi(false,m); toast(m); };
+  rec.onend=()=>{ recog=null; setVoiceUi(false); if(finalText.trim()) applyVoice(finalText); };
+  try{ rec.start(); }catch(e){ recog=null; toast('음성 인식을 시작하지 못했어요'); } }
+document.addEventListener('click',e=>{ const t=e.target.closest('#v-btn,#v-parse'); if(!t) return; if(t.id==='v-btn') startVoice(); else { const v=document.getElementById('v-text'); if(v&&v.value.trim()) applyVoice(v.value); else toast('말한 내용을 글로 써 주세요'); } });
+document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target&&e.target.id==='v-text'){ e.preventDefault(); const v=e.target; if(v.value.trim()) applyVoice(v.value); } });
 
 decorateNav();
 boot(); loadNotices();
