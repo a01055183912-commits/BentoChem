@@ -6,28 +6,31 @@
 <title>벤토케미칼 통합 ERP</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<meta name="theme-color" content="#062f49">
+<link rel="icon" href="assets/mascot.webp">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: 상단 탭 바 + 단일 컬럼 작업면. 숫자는 모노 탭형, 지표 코드는 장부식 태그 */
+/* 벤토케미칼 브로셔 스타일: 로고의 빨강·하늘색, 하단 띠의 남색. 숫자는 모노 탭형 */
 :root{
-  --bg:#f5f5f3; --surface:#ffffff; --line:#e2dfda; --fg:#1f1b17; --muted:#665f57;
-  --accent:#8f4f1c; --accent-soft:#f6e9de; --accent-fg:#ffffff;
+  --bg:#eef4f8; --surface:#ffffff; --line:#d5dee6; --fg:#1a1a1a; --muted:#566570;
+  --accent:#0b4f79; --accent-soft:#dff2fc; --accent-fg:#ffffff;
   --warn:#a15c07; --bad:#b42318;
-  --s1:#8f4f1c; --s2:#3a6fb0; --s3:#b0713a; --s4:#7a5bb0; --s5:#4f8a2e; --s6:#b04a6a; --s7:#2c8aa0; --s8:#8a7a2c;
-  --f-body:"IBM Plex Sans KR",system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --red:#e60012; --cyan:#009fe3; --navy:#062f49;
+  --s1:#009fe3; --s2:#e60012; --s3:#062f49; --s4:#7fcdf0; --s5:#2a8c5f; --s6:#f28c28; --s7:#6552c9; --s8:#8a97a3;
+  --f-body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   --f-num:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#151311; --surface:#1d1a17; --line:#35302b; --fg:#efe9e3; --muted:#a89f96;
-  --accent:#e2a36b; --accent-soft:#3a2a1c; --accent-fg:#1a120b;
-  --warn:#e3a54a; --bad:#f07a6e;
-  --s1:#e2a36b; --s2:#7aa7e6; --s3:#e0a46e; --s4:#b39be6; --s5:#8cc66a; --s6:#e68aa6; --s7:#6cc6dc; --s8:#d6c46a;
+  --bg:#0a1822; --surface:#0f2535; --line:#25425a; --fg:#eef4f8; --muted:#9db3c2;
+  --accent:#5bc4f2; --accent-soft:#0f3a52; --accent-fg:#062f49;
+  --warn:#e3a54a; --bad:#ff7d6e; --red:#ff4a58; --cyan:#37b8ee; --navy:#0a2a40;
+  --s1:#37b8ee; --s2:#ff6b77; --s3:#a9c7dc; --s4:#7fcdf0; --s5:#6cd0a0; --s6:#f5a45a; --s7:#a99cff; --s8:#9aa8b4;
   color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#151311; --surface:#1d1a17; --line:#35302b; --fg:#efe9e3; --muted:#a89f96;
-  --accent:#e2a36b; --accent-soft:#3a2a1c; --accent-fg:#1a120b;
-  --warn:#e3a54a; --bad:#f07a6e;
-  --s1:#e2a36b; --s2:#7aa7e6; --s3:#e0a46e; --s4:#b39be6; --s5:#8cc66a; --s6:#e68aa6; --s7:#6cc6dc; --s8:#d6c46a;
+  --bg:#0a1822; --surface:#0f2535; --line:#25425a; --fg:#eef4f8; --muted:#9db3c2;
+  --accent:#5bc4f2; --accent-soft:#0f3a52; --accent-fg:#062f49;
+  --warn:#e3a54a; --bad:#ff7d6e; --red:#ff4a58; --cyan:#37b8ee; --navy:#0a2a40;
+  --s1:#37b8ee; --s2:#ff6b77; --s3:#a9c7dc; --s4:#7fcdf0; --s5:#6cd0a0; --s6:#f5a45a; --s7:#a99cff; --s8:#9aa8b4;
   color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.55}
@@ -137,13 +140,52 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.g2{grid-template-columns:minmax(0,1fr)}.status{margin-left:0;width:100%}}
 @media (max-width:420px){.form{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- 브로셔 스타일 덮어쓰기 ---- */
+body{font-size:16px}
+.top{border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{height:36px;width:auto;display:block}
+.brand span{font-size:12px;font-weight:700;letter-spacing:.2em;color:var(--muted);white-space:nowrap}
+:root[data-theme="dark"] .brand img{background:#fff;border-radius:8px;padding:3px 6px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .brand img{background:#fff;border-radius:8px;padding:3px 6px}}
+nav a{padding:9px 14px;font-weight:700;font-size:15px}
+nav a[aria-current="page"]{background:var(--accent);color:var(--accent-fg)}
+h1{font-size:clamp(26px,6.6vw,34px);font-weight:900;letter-spacing:-.02em;line-height:1.25}
+h1::before{content:"";display:block;width:34px;height:3px;background:var(--red);margin-bottom:10px}
+h2{font-size:18px;font-weight:900}
+.lead{font-size:16px}
+.vno{text-align:right;font-size:12.5px;font-weight:700;letter-spacing:.22em;color:var(--muted)}
+.tile,.qc{border-top:4px solid var(--cyan)}
+.qc.bad{border-top-color:var(--red)}
+th{background:var(--navy);color:#fff}
+tr.sum th,tr.sum td{background:var(--accent-soft);color:var(--fg);border-top:2px solid var(--navy)}
+.empty::before{content:"";display:block;width:76px;height:80px;margin:0 auto 10px;background:url(assets/mascot.webp) center/contain no-repeat}
+.hello{display:flex;align-items:center;gap:12px;padding:10px 16px 10px 8px;background:var(--accent-soft);border-radius:16px}
+.hello img{width:72px;height:auto;flex:none}
+.hello b{display:block;color:var(--red);font-size:17px;font-weight:900}
+.hello span{color:var(--accent);font-size:15.5px;font-weight:700}
+.foot{background:var(--navy);color:#fff;margin-top:8px;padding:16px 0 calc(16px + env(safe-area-inset-bottom,0px))}
+.foot .wrap{display:flex;justify-content:space-between;gap:4px 18px;flex-wrap:wrap;font-size:14px}
+.foot b{font-weight:900}.foot span{color:#cfe3ef}
+@media (max-width:640px){
+  body{font-size:17px}
+  .btn{min-height:44px;padding:9px 14px}
+  .btn.sm{min-height:40px}
+  select,input{min-height:46px;font-size:16px}
+  th,td{padding:9px 10px}
+  table{font-size:14.5px}
+  .tile .v{font-size:24px}
+  .qc .v{font-size:28px}
+  .card{padding:16px}
+}
 </style>
 
 <style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <div class="brand"><i></i>벤토케미칼 통합 ERP</div>
+  <div class="brand"><img src="assets/logo.png" alt="(주)벤토케미칼 BentoChem"><span>통합 ERP</span></div>
   <nav aria-label="화면">
     <a href="#dash" id="nav-dash">대시보드</a>
     <a href="#agg" id="nav-agg">집계 분석</a>
@@ -158,6 +200,7 @@ textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <span class="status" id="status">연결 중…</span>
 </div></header>
 <main class="wrap" id="app"><div class="card empty">데이터를 불러오는 중입니다. 처음 쓰신다면 「기업정보」에서 회사 정보를, 「지표 입력」에서 첫 값을 넣으세요.</div></main>
+<footer class="foot"><div class="wrap"><b>주식회사 벤토케미칼 <span>BENTOCHEM CO., LTD.</span></b><span>051-715-0106 · www.bentochem.com</span></div></footer>
 <div class="toast" id="toast" hidden></div>
 
 <script>
@@ -428,6 +471,9 @@ function expiryItems(){ const out=[];
 const ddBadge=dd=>dd<0?`<span class="fail">만료 ${-dd}일 지남</span>`:dd<=30?`<span class="warn-b">D-${dd}</span>`:`<span class="pass">D-${dd}</span>`;
 
 /* ---------- 화면: 대시보드 ---------- */
+function helloBar(){ const it=expiryItems(); const over=it.filter(x=>x.dd<0).length, soon=it.filter(x=>x.dd>=0&&x.dd<=7).length;
+  const msg=over?`만료된 서류가 ${over}건 있어요. 「만료 알림」을 확인하세요.`:soon?`이번 주 안에 마감되는 항목이 ${soon}건 있어요.`:'지금 급하게 챙길 기한은 없어요. 오늘도 힘내세요!';
+  return `<div class="hello"><img src="assets/mascot.webp" alt="벤토켐이"><div><b>안녕하세요, 벤토켐이에요!</b><span>${esc(msg)}</span></div></div>`; }
 function vDash(){ const ys=[...new Set([...ENTRIES.map(e=>(e.date||'').slice(0,4)).filter(Boolean),''+thisYear()])].sort();
   const y=+(UI.year&&ys.includes(UI.year)?UI.year:ys[ys.length-1]), py=y-1;
   const rev=yp('revenue',y), prev=yp('revenue',py); const yoy=prev?(rev-prev)/Math.abs(prev)*100:null;
@@ -446,6 +492,7 @@ function vDash(){ const ys=[...new Set([...ENTRIES.map(e=>(e.date||'').slice(0,4
   const sup=recs('F'); const stOrder=['준비','신청','선정','진행','완료','탈락']; const st={}; sup.forEach(r=>st[r.status||'준비']=(st[r.status||'준비']||0)+1);
   return `<div class="row"><div><h1>경영 대시보드</h1><p class="lead">${esc(companyName())} · 기준연도 ${y}</p></div><span class="sp"></span>
     <label class="note" for="f-year">기준연도</label><select id="f-year">${ys.map(v=>`<option ${+v===y?'selected':''}>${v}</option>`).join('')}</select></div>
+  ${helloBar()}
   ${sampleBanner()}
   <div class="tiles t5">
    ${tile(`${y} 매출 누계`,fmt(rev),'백만원',yoy==null?'전년 데이터 없음':`전년 대비 <b class="${yoy>=0?'up':'down'}">${yoy>=0?'▲':'▼'} ${Math.abs(yoy).toFixed(1)}%</b>`)}
@@ -547,7 +594,7 @@ function noticeCard(){ const N=NOTICES; if(!N) return '<div class="card"><h2>새
    <td>${u?`<a class="btn sm" href="${esc(u)}" target="_blank" rel="noopener noreferrer">공고 ↗</a> `:''}${added?'<span class="pass">등록됨</span>':canWrite?`<button class="btn sm" data-addn="${i}">관심 등록</button>`:''}</td></tr>`;}).join('')}</table></div>`:'<div class="empty">지금 접수 중인 공고가 없습니다.</div>'}</div>`; }
 function vProg(){ const rows=recs('H').filter(r=>r.status!=='탈락'&&r.status!=='완료').sort((a,b)=>(a.deadline||'9999').localeCompare(b.deadline||'9999'));
   const agU=n=>{const a=AGENCIES.find(x=>x.n===n);return a?a.u:'';};
-  return `<div><h1>지원사업 공고</h1><p class="lead">부산 지원기관의 공고 페이지로 바로 이동하고, 신청할 사업을 등록해 마감일을 관리합니다. 공고 목록은 자동으로 수집되지 않으니 기관 사이트에서 확인한 뒤 등록하세요.</p></div>
+  return `<div><h1>지원사업 공고</h1><p class="lead">부산 지원기관의 공고 페이지로 바로 이동하고, 신청할 사업을 등록해 마감일을 관리합니다. 일부 기관은 아래 「새로 올라온 공고」에 자동으로 모입니다. 나머지는 기관 사이트에서 확인한 뒤 등록하세요.</p></div>
   <div class="card"><h2>지원기관 바로가기 <span class="note">${AGENCIES.length}곳</span></h2><div class="qgrid">${AGENCIES.map(a=>`<div class="qc"><div class="h"><span>${esc(a.n)}</span></div><div class="note">${esc(a.d)}</div><div class="row"><a class="btn sm" href="${esc(a.u)}" target="_blank" rel="noopener noreferrer">공고 보러 가기 ↗</a>${a.chk?'<span class="warn-b">주소 확인 필요</span>':''}</div></div>`).join('')}</div></div>
   ${noticeCard()}
   <div class="card"><div class="row"><h2 style="margin:0">신청 예정·진행 공고 <span class="note">${rows.length}건</span></h2><span class="sp"></span><a class="btn pri" href="#info-H">공고 등록·수정</a></div>
@@ -578,6 +625,7 @@ function vData(){ const sc=ENTRIES.filter(e=>e.sample).length+RECORDS.filter(r=>
 function exportJson(){ const strip=o=>{const {id,...r}=o;return {id,...r};}; return JSON.stringify({exportedAt:new Date().toISOString(),master:MASTER,records:RECORDS.map(strip),entries:ENTRIES.map(strip)},null,1); }
 
 /* ---------- 라우팅·렌더 ---------- */
+const VNO={dash:'01 · 대시보드',agg:'02 · 집계 분석',qc:'03 · 품질 현황',entry:'04 · 지표 입력',info:'05 · 기업정보',apply:'06 · 신청서 작성',prog:'07 · 지원사업 공고',alerts:'08 · 만료 알림',data:'09 · 데이터 관리'};
 const ROUTES=['dash','agg','qc','entry','info','apply','prog','alerts','data'];
 function route(){ const h=location.hash.slice(1); if(h.startsWith('info')) return 'info'; return ROUTES.includes(h)?h:'dash'; }
 let pendingRender=false;
@@ -588,7 +636,7 @@ function render(force){ const r=route();
   if(!force && ae && $('#app').contains(ae) && ae.closest('form') && /INPUT|TEXTAREA|SELECT/.test(ae.tagName)){ pendingRender=true; return; }
   pendingRender=false; const focusId=ae&&ae.id; const y=window.scrollY;
   const h=location.hash.slice(1);
-  $('#app').innerHTML = r==='entry'?vEntry():r==='qc'?vQC():r==='agg'?vAgg():r==='info'?vInfo(h.split('-')[1]||'A'):r==='apply'?vApply():r==='prog'?vProg():r==='alerts'?vAlerts():r==='data'?vData():vDash();
+  $('#app').innerHTML = `<div class="vno">${VNO[r]||''}</div>` + (r==='entry'?vEntry():r==='qc'?vQC():r==='agg'?vAgg():r==='info'?vInfo(h.split('-')[1]||'A'):r==='apply'?vApply():r==='prog'?vProg():r==='alerts'?vAlerts():r==='data'?vData():vDash());
   window.scrollTo(0,y);
   if(focusId&&document.getElementById(focusId)&&!/^(e-value|r-|m-)/.test(focusId)) document.getElementById(focusId).focus(); }
 document.addEventListener('focusout',()=>{ setTimeout(()=>{ if(pendingRender) render(); },150); });
