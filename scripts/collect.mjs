@@ -166,6 +166,30 @@ const SOURCES = [
       return out;
     },
   },
+  {
+    id: 'tourbiz', org: '부산관광기업지원센터',
+    async fetch() {
+      // 별도 사업공고 게시판이 없어 공지사항에서 모집·공모 공고를 골라냅니다. 마감일은 제목의 "(~11/25)" 표기에서 읽고,
+      // 마감일이 제목에 없는 글은 접수 여부를 알 수 없어 제외합니다.
+      const base = 'https://tourbiz.bto.or.kr/kor/CMS/Board/Board.do';
+      const html = await getText(`${base}?mCode=MN032`);
+      const rows = html.split('<tr').filter((x) => x.includes('board_seq='));
+      if (!rows.length) throw new Error('게시판 구조를 찾지 못했습니다 (사이트 개편 가능성)');
+      const out = [];
+      for (const row of rows) {
+        const seq = (row.match(/board_seq=(\d+)/) || [])[1];
+        const title = clean((row.match(/board_seq=\d+'>\s*([^<]*)</) || [])[1]);
+        const posted = (row.match(/class="date">(\d{4}-\d{2}-\d{2})/) || [])[1] || '';
+        if (!seq || !title || !/모집|공모|신청|참가/.test(title) || /결과|선정자|발표|변경/.test(title)) continue;
+        const d = title.match(/~\s*(\d{1,2})\s*\/\s*(\d{1,2})/);
+        if (!d || !posted) continue;
+        let year = +posted.slice(0, 4); if (+d[1] < +posted.slice(5, 7)) year++; // 연말~연초에 걸친 마감
+        const end = `${year}-${String(d[1]).padStart(2, '0')}-${String(d[2]).padStart(2, '0')}`;
+        out.push({ id: seq, title, status: '접수중', start: posted, end, url: `${base}?mCode=MN032&mode=view&mgr_seq=6&board_seq=${seq}`, summary: '' });
+      }
+      return out;
+    },
+  },
 ];
 
 const items = [], errors = {};

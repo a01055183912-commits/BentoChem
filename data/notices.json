@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-24T16:04:30.666Z",
+ "updatedAt": "2026-11-24T16:07:05.092Z",
  "errors": {},
  "items": [
   {
@@ -11,6 +11,17 @@
    "start": "2026-11-12",
    "end": "2026-11-25",
    "url": "https://bipa.kr/board/business/view?seq=85490",
+   "summary": ""
+  },
+  {
+   "src": "tourbiz",
+   "org": "부산관광기업지원센터",
+   "id": "1274",
+   "title": "「K-콘텐츠 관광마케팅 아카데미 2기」 기초아카데미 참가자 모집(~11/25)",
+   "status": "접수중",
+   "start": "2026-11-05",
+   "end": "2026-11-25",
+   "url": "https://tourbiz.bto.or.kr/kor/CMS/Board/Board.do?mCode=MN032&mode=view&mgr_seq=6&board_seq=1274",
    "summary": ""
   },
   {
