@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-24T15:55:30.101Z",
+ "updatedAt": "2026-11-24T16:01:44.882Z",
  "errors": {},
  "items": [
   {
@@ -44,6 +44,17 @@
    "start": "2026-11-11",
    "end": "2026-11-27",
    "url": "https://www.btp.or.kr/kor/CMS/Board/Board.do?mCode=MN013&mode=view&mgr_seq=16&board_seq=9582673",
+   "summary": ""
+  },
+  {
+   "src": "ccei",
+   "org": "부산창조경제혁신센터",
+   "id": "10600",
+   "title": "2026년 카카오클래스: AI 비즈니스 실전 과정 수강 신청 안내(~11. 27.(금))",
+   "status": "진행중",
+   "start": "2026-09-18",
+   "end": "2026-11-27",
+   "url": "https://ccei.creativekorea.or.kr/busan/service/program_view.do?no=10600&pn=1",
    "summary": ""
   },
   {
@@ -331,6 +342,17 @@
    "end": "",
    "url": "https://www.bsia.or.kr/announcements/36?mcode=an011",
    "summary": "글로벌협력 · 글로벌 교류·투자유치 지원사업"
+  },
+  {
+   "src": "ccei",
+   "org": "부산창조경제혁신센터",
+   "id": "9280",
+   "title": "\"스타트 오픈이노베이션 창구\" 오픈이노베이션 협업 수요 등록 기업 상시 모집",
+   "status": "진행중",
+   "start": "2022-09-01",
+   "end": "",
+   "url": "https://ccei.creativekorea.or.kr/busan/service/program_view.do?no=9280&pn=1",
+   "summary": "상시 모집"
   }
  ]
 }

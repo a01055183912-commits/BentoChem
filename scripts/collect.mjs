@@ -114,6 +114,34 @@ const SOURCES = [
       return out;
     },
   },
+  {
+    id: 'ccei', org: '부산창조경제혁신센터',
+    async fetch() {
+      // 운영 프로그램 목록(sPtime=now: 현재 운영 중). 유형이 '사업공고'인 것만 가져옵니다 (행사·교육·예약 현황 제외).
+      let j;
+      for (let i = 0; i < 3; i++) {
+        try {
+          const r = await fetch('https://ccei.creativekorea.or.kr/busan/json/service/programLists.json', {
+            method: 'POST', headers: { ...UA, 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'sMenuType=00040001&pn=1&pagePerContents=50&sPtime=now&cntry_nm=busan', signal: AbortSignal.timeout(30000),
+          });
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          j = await r.json(); break;
+        } catch (e) { if (i === 2) throw e; await sleep(1500 * (i + 1)); }
+      }
+      const list = j?.result?.list;
+      if (!Array.isArray(list)) throw new Error('응답 구조가 달라졌습니다 (사이트 개편 가능성)');
+      const d = (v) => String(v || '').replace(/\./g, '-');
+      return list.filter((x) => x.TYPE_NM === '사업공고').map((x) => {
+        const end = d(x.C_EDATE);
+        return {
+          id: String(x.SEQ), title: clean(x.PROGRAM_TITLE), status: '진행중',
+          start: d(x.C_SDATE), end: end >= '2030' ? '' : end, // 2030년 이후로 잡힌 종료일은 상시 모집으로 봅니다
+          url: `https://ccei.creativekorea.or.kr/busan/service/program_view.do?no=${x.SEQ}&pn=1`, summary: end >= '2030' ? '상시 모집' : '',
+        };
+      });
+    },
+  },
 ];
 
 const items = [], errors = {};
