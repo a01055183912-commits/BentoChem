@@ -142,6 +142,30 @@ const SOURCES = [
       });
     },
   },
+  {
+    id: 'bipa', org: '부산정보산업진흥원',
+    async fetch() {
+      // 사업공고 게시판. 목록에는 마감일 대신 D-day가 나와서 오늘 날짜에 더해 마감일을 계산합니다 (마감된 공고는 제외).
+      const base = 'https://bipa.kr';
+      const out = [];
+      for (let page = 1; page <= 2; page++) {
+        if (page > 1) await sleep(800);
+        const html = await getText(`${base}/board/business/list?page=${page}`);
+        const rows = html.split('<tr>').filter((x) => x.includes('view?seq='));
+        if (page === 1 && !rows.length) throw new Error('게시판 구조를 찾지 못했습니다 (사이트 개편 가능성)');
+        for (const row of rows) {
+          const seq = (row.match(/view\?seq=(\d+)/) || [])[1];
+          const title = clean((row.match(/<td class="tt">\s*<a [^>]*>([^<]*)</) || [])[1]);
+          const dd = (row.match(/<span class="available">\s*D-(\d+|Day)\s*</) || [])[1];
+          const posted = (row.match(/(\d{4}-\d{2}-\d{2})/) || [])[1] || '';
+          if (!seq || !title || dd == null) continue; // 마감(closed)이면 건너뜀
+          const end = new Date(new Date(today).getTime() + (dd === 'Day' ? 0 : +dd) * 864e5).toISOString().slice(0, 10);
+          out.push({ id: seq, title, status: '접수중', start: posted, end, url: `${base}/board/business/view?seq=${seq}`, summary: '' });
+        }
+      }
+      return out;
+    },
+  },
 ];
 
 const items = [], errors = {};

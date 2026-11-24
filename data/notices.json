@@ -1,7 +1,29 @@
 {
- "updatedAt": "2026-11-24T16:01:44.882Z",
+ "updatedAt": "2026-11-24T16:04:30.666Z",
  "errors": {},
  "items": [
+  {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "85490",
+   "title": "부산 글로벌게임센터(BGC) 오렌지플래닛 입주모집 공고",
+   "status": "접수중",
+   "start": "2026-11-12",
+   "end": "2026-11-25",
+   "url": "https://bipa.kr/board/business/view?seq=85490",
+   "summary": ""
+  },
+  {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "85489",
+   "title": "2026년 부산콘텐츠비즈타운(기업지원센터) 4차 입주기업 모집 공고",
+   "status": "접수중",
+   "start": "2026-11-12",
+   "end": "2026-11-26",
+   "url": "https://bipa.kr/board/business/view?seq=85489",
+   "summary": ""
+  },
   {
    "src": "bsbsc",
    "org": "부산소상공인지원센터",
@@ -102,6 +124,72 @@
    "summary": ""
   },
   {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "85504",
+   "title": "2026년 지역 게임 IP 콘텐츠 글로벌 확장 및 사업화 컨설팅 공고",
+   "status": "접수중",
+   "start": "2026-11-22",
+   "end": "2026-11-30",
+   "url": "https://bipa.kr/board/business/view?seq=85504",
+   "summary": ""
+  },
+  {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "85497",
+   "title": "2026년 부산글로벌웹툰센터 창작지원실 2차 입주모집 추가 공고",
+   "status": "접수중",
+   "start": "2026-11-17",
+   "end": "2026-11-30",
+   "url": "https://bipa.kr/board/business/view?seq=85497",
+   "summary": ""
+  },
+  {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "85203",
+   "title": "2026년 ICT 중소기업 정보보호 지원 사업 수요기업 모집",
+   "status": "접수중",
+   "start": "2026-07-01",
+   "end": "2026-11-30",
+   "url": "https://bipa.kr/board/business/view?seq=85203",
+   "summary": ""
+  },
+  {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "84939",
+   "title": "부산 클라우드 혁신센터(부산CIC) 멤버십 프로그램 참여기업 모집 공고",
+   "status": "접수중",
+   "start": "2026-04-10",
+   "end": "2026-11-30",
+   "url": "https://bipa.kr/board/business/view?seq=84939",
+   "summary": ""
+  },
+  {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "85472",
+   "title": "「부산 가상증강현실 융복합센터」 입주모집공고",
+   "status": "접수중",
+   "start": "2026-11-03",
+   "end": "2026-12-01",
+   "url": "https://bipa.kr/board/business/view?seq=85472",
+   "summary": ""
+  },
+  {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "85512",
+   "title": "K-해양 AI 벨트 얼라이언스 참여 수요조사",
+   "status": "접수중",
+   "start": "2026-11-24",
+   "end": "2026-12-09",
+   "url": "https://bipa.kr/board/business/view?seq=85512",
+   "summary": ""
+  },
+  {
    "src": "btp",
    "org": "부산테크노파크",
    "id": "9581897",
@@ -190,6 +278,17 @@
    "summary": "2026 라이브커머스 운영 지원 · 🎥 우리 동네 숨은 꿀템, 라이브커머스로 대박 터뜨릴 사장님? 🚀 판로는 넓히고 매출은 올리고! 📈 부산경제진흥원이 소상공인 여러분의 든든한 지원군이 되어드립니다. 복잡한 라이브 방송 준비, 저희가 싹- 다 도"
   },
   {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "85405",
+   "title": "사이버보안 원격 보안관제 수요기업 모집",
+   "status": "접수중",
+   "start": "2026-10-14",
+   "end": "2026-12-18",
+   "url": "https://bipa.kr/board/business/view?seq=85405",
+   "summary": ""
+  },
+  {
    "src": "btp",
    "org": "부산테크노파크",
    "id": "9582692",
@@ -275,6 +374,28 @@
    "start": "2026-01-29",
    "end": "2026-12-31",
    "url": "https://www.btp.or.kr/kor/CMS/Board/Board.do?mCode=MN013&mode=view&mgr_seq=16&board_seq=9581378",
+   "summary": ""
+  },
+  {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "85155",
+   "title": "「AX 에이지테크 레퍼런스-업 프로젝트」 일반 실증 수요처 Pool 안내 (상시)",
+   "status": "접수중",
+   "start": "2026-06-18",
+   "end": "2026-12-31",
+   "url": "https://bipa.kr/board/business/view?seq=85155",
+   "summary": ""
+  },
+  {
+   "src": "bipa",
+   "org": "부산정보산업진흥원",
+   "id": "84829",
+   "title": "「부산AI실증지원센터 운영」 고성능 컴퓨터(HPC) 이용 지원사업 참여자(기업) 모집",
+   "status": "접수중",
+   "start": "2026-02-19",
+   "end": "2026-12-31",
+   "url": "https://bipa.kr/board/business/view?seq=84829",
    "summary": ""
   },
   {
