@@ -1,18 +1,7 @@
 {
- "updatedAt": "2026-11-26T03:50:39.314Z",
+ "updatedAt": "2026-11-27T03:51:21.359Z",
  "errors": {},
  "items": [
-  {
-   "src": "bipa",
-   "org": "부산정보산업진흥원",
-   "id": "85489",
-   "title": "2026년 부산콘텐츠비즈타운(기업지원센터) 4차 입주기업 모집 공고",
-   "status": "접수중",
-   "start": "2026-11-12",
-   "end": "2026-11-26",
-   "url": "https://bipa.kr/board/business/view?seq=85489",
-   "summary": ""
-  },
   {
    "src": "bsbsc",
    "org": "부산소상공인지원센터",
@@ -77,17 +66,6 @@
    "start": "2026-11-17",
    "end": "2026-11-30",
    "url": "https://www.btp.or.kr/kor/CMS/Board/Board.do?mCode=MN013&mode=view&mgr_seq=16&board_seq=9582687",
-   "summary": ""
-  },
-  {
-   "src": "btp",
-   "org": "부산테크노파크",
-   "id": "9582071",
-   "title": "2026년 부산 연구개발장비 공동활용 지원사업 모집 공고(2차)",
-   "status": "진행",
-   "start": "2026-06-19",
-   "end": "2026-11-30",
-   "url": "https://www.btp.or.kr/kor/CMS/Board/Board.do?mCode=MN013&mode=view&mgr_seq=16&board_seq=9582071",
    "summary": ""
   },
   {
@@ -165,6 +143,17 @@
    "start": "2026-11-03",
    "end": "2026-12-01",
    "url": "https://bipa.kr/board/business/view?seq=85472",
+   "summary": ""
+  },
+  {
+   "src": "btp",
+   "org": "부산테크노파크",
+   "id": "9582719",
+   "title": "2026년 블록체인 특화 클러스터 조성 사업 민간위탁사업비 회계 정산기관 모집",
+   "status": "진행",
+   "start": "2026-11-26",
+   "end": "2026-12-02",
+   "url": "https://www.btp.or.kr/kor/CMS/Board/Board.do?mCode=MN013&mode=view&mgr_seq=16&board_seq=9582719",
    "summary": ""
   },
   {
@@ -330,6 +319,17 @@
    "start": "2026-09-07",
    "end": "2026-12-31",
    "url": "https://www.btp.or.kr/kor/CMS/Board/Board.do?mCode=MN013&mode=view&mgr_seq=16&board_seq=9582413",
+   "summary": ""
+  },
+  {
+   "src": "btp",
+   "org": "부산테크노파크",
+   "id": "9582071",
+   "title": "2026년 부산 연구개발장비 공동활용 지원사업 모집 공고(2차)",
+   "status": "진행",
+   "start": "2026-06-19",
+   "end": "2026-12-31",
+   "url": "https://www.btp.or.kr/kor/CMS/Board/Board.do?mCode=MN013&mode=view&mgr_seq=16&board_seq=9582071",
    "summary": ""
   },
   {
